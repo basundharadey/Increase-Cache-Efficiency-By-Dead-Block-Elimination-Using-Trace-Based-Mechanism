@@ -1,0 +1,40 @@
+DBP 0:
+13075727
+dl1.accesses                5332172 # total number of accesses
+dl1.hits                    5263433 # total number of hits
+dl1.misses                    68739 # total number of misses
+dl1.replacements              68227 # total number of replacements
+dl1.writebacks                31110 # total number of writebacks
+
+
+DBP 1:
+13074647
+dl1.accesses                5333036 # total number of accesses
+dl1.hits                    5264310 # total number of hits
+dl1.misses                    68726 # total number of misses
+dl1.replacements              68214 # total number of replacements
+dl1.writebacks                31017 # total number of writebacks
+
+13074641
+dl1.accesses                5333034 # total number of accesses
+dl1.hits                    5264312 # total number of hits
+dl1.misses                    68722 # total number of misses
+dl1.replacements              68210 # total number of replacements
+dl1.writebacks                31017 # total number of writebacks
+
+
+DBP 2:
+13074492
+dl1.accesses                5332984 # total number of accesses
+dl1.hits                    5264024 # total number of hits
+dl1.misses                    68960 # total number of misses
+dl1.replacements              68448 # total number of replacements
+dl1.writebacks                31111 # total number of writebacks
+
+13074431
+dl1.accesses                5332971 # total number of accesses
+dl1.hits                    5264011 # total number of hits
+dl1.misses                    68960 # total number of misses
+dl1.replacements              68448 # total number of replacements
+dl1.writebacks                31112 # total number of writebacks
+

@@ -1,0 +1,277 @@
+sim-outorder: SimpleScalar/PISA Tool Set version 3.0 of August, 2003.
+Copyright (c) 1994-2003 by Todd M. Austin, Ph.D. and SimpleScalar, LLC.
+All Rights Reserved. This version of SimpleScalar is licensed for academic
+non-commercial use.  No portion of this work may be used by any commercial
+entity, or for any commercial purpose, without the prior written permission
+of SimpleScalar, LLC (info@simplescalar.com).
+
+sim: command line: simplesim-3.0 Cache/sim-outorder -DBP 2 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/gcc/Gcc /home/josh/Desktop/benchmarks/gcc/cccp.i -o cccp.s 
+
+sim: simulation started @ Wed Nov 26 10:41:33 2014, options follow:
+
+sim-outorder: This simulator implements a very detailed out-of-order issue
+superscalar processor with a two-level memory system and speculative
+execution support.  This simulator is a performance simulator, tracking the
+latency of all pipeline operations.
+
+# -config                     # load configuration from a file
+# -dumpconfig                 # dump configuration to a file
+# -h                    false # print help message    
+# -v                    false # verbose operation     
+# -d                    false # enable debug message  
+# -i                    false # start in Dlite debugger
+-seed                       1 # random number generator seed (0 for timer seed)
+# -q                    false # initialize and terminate immediately
+# -chkpt               <null> # restore EIO trace execution from <fname>
+# -redir:sim           <null> # redirect simulator output to file (non-interactive only)
+# -redir:prog          <null> # redirect simulated program output to file
+-nice                       0 # simulator scheduling priority
+-max:inst                   0 # maximum number of inst's to execute
+-fastfwd                    0 # number of insts skipped before timing starts
+# -ptrace              <null> # generate pipetrace, i.e., <fname|stdout|stderr> <range>
+-fetch:ifqsize              4 # instruction fetch queue size (in insts)
+-fetch:mplat                3 # extra branch mis-prediction latency
+-fetch:speed                1 # speed of front-end of machine relative to execution core
+-bpred                  bimod # branch predictor type {nottaken|taken|perfect|bimod|2lev|comb}
+-bpred:bimod     2048 # bimodal predictor config (<table size>)
+-bpred:2lev      1 1024 8 0 # 2-level predictor config (<l1size> <l2size> <hist_size> <xor>)
+-bpred:comb      1024 # combining predictor config (<meta_table_size>)
+-bpred:ras                  8 # return address stack size (0 for no return stack)
+-bpred:btb       512 4 # BTB config (<num_sets> <associativity>)
+# -bpred:spec_update       <null> # speculative predictors update in {ID|WB} (default non-spec)
+-decode:width               4 # instruction decode B/W (insts/cycle)
+-issue:width                4 # instruction issue B/W (insts/cycle)
+-issue:inorder          false # run pipeline with in-order issue
+-issue:wrongpath         true # issue instructions down wrong execution paths
+-commit:width               4 # instruction commit B/W (insts/cycle)
+-ruu:size                 128 # register update unit (RUU) size
+-lsq:size                  16 # load/store queue (LSQ) size
+-cache:dl1       dl1:256:32:2:l # l1 data cache config, i.e., {<config>|none}
+-cache:dl1lat               1 # l1 data cache hit latency (in cycles)
+-cache:dl2       dl2:512:128:8:l # l2 data cache config, i.e., {<config>|none}
+-cache:dl2lat               6 # l2 data cache hit latency (in cycles)
+-cache:il1       il1:256:32:2:l # l1 inst cache config, i.e., {<config>|dl1|dl2|none}
+-cache:il1lat               1 # l1 instruction cache hit latency (in cycles)
+-cache:il2                dl2 # l2 instruction cache config, i.e., {<config>|dl2|none}
+-cache:il2lat               6 # l2 instruction cache hit latency (in cycles)
+-cache:flush            false # flush caches on system calls
+-cache:icompress        false # convert 64-bit inst addresses to 32-bit inst equivalents
+-mem:lat         18 2 # memory access latency (<first_chunk> <inter_chunk>)
+-mem:width                  8 # memory access bus width (in bytes)
+-tlb:itlb        itlb:16:4096:4:l # instruction TLB config, i.e., {<config>|none}
+-tlb:dtlb        dtlb:32:4096:4:l # data TLB config, i.e., {<config>|none}
+-tlb:lat                   30 # inst/data TLB miss latency (in cycles)
+-res:ialu                   4 # total number of integer ALU's available
+-res:imult                  1 # total number of integer multiplier/dividers available
+-res:memport                2 # total number of memory system ports available (to CPU)
+-res:fpalu                  4 # total number of floating point ALU's available
+-res:fpmult                 1 # total number of floating point multiplier/dividers available
+# -pcstat              <null> # profile stat(s) against text addr's (mult uses ok)
+-bugcompat              false # operate in backward-compatible bugs mode (for testing only)
+-DBP                        2 # Dead block predictor  
+
+  Pipetrace range arguments are formatted as follows:
+
+    {{@|#}<start>}:{{@|#|+}<end>}
+
+  Both ends of the range are optional, if neither are specified, the entire
+  execution is traced.  Ranges that start with a `@' designate an address
+  range to be traced, those that start with an `#' designate a cycle count
+  range.  All other range values represent an instruction count range.  The
+  second argument, if specified with a `+', indicates a value relative
+  to the first argument, e.g., 1000:+100 == 1000:1100.  Program symbols may
+  be used in all contexts.
+
+    Examples:   -ptrace FOO.trc #0:#1000
+                -ptrace BAR.trc @2000:
+                -ptrace BLAH.trc :1500
+                -ptrace UXXE.trc :
+                -ptrace FOOBAR.trc @main:+278
+
+  Branch predictor configuration examples for 2-level predictor:
+    Configurations:   N, M, W, X
+      N   # entries in first level (# of shift register(s))
+      W   width of shift register(s)
+      M   # entries in 2nd level (# of counters, or other FSM)
+      X   (yes-1/no-0) xor history and address for 2nd level index
+    Sample predictors:
+      GAg     : 1, W, 2^W, 0
+      GAp     : 1, W, M (M > 2^W), 0
+      PAg     : N, W, 2^W, 0
+      PAp     : N, W, M (M == 2^(N+W)), 0
+      gshare  : 1, W, 2^W, 1
+  Predictor `comb' combines a bimodal and a 2-level predictor.
+
+  The cache config parameter <config> has the following format:
+
+    <name>:<nsets>:<bsize>:<assoc>:<repl>
+
+    <name>   - name of the cache being defined
+    <nsets>  - number of sets in the cache
+    <bsize>  - block size of the cache
+    <assoc>  - associativity of the cache
+    <repl>   - block replacement strategy, 'l'-LRU, 'f'-FIFO, 'r'-random
+
+    Examples:   -cache:dl1 dl1:4096:32:1:l
+                -dtlb dtlb:128:4096:32:r
+
+  Cache levels can be unified by pointing a level of the instruction cache
+  hierarchy at the data cache hiearchy using the "dl1" and "dl2" cache
+  configuration arguments.  Most sensible combinations are supported, e.g.,
+
+    A unified l2 cache (il2 is pointed at dl2):
+      -cache:il1 il1:128:64:1:l -cache:il2 dl2
+      -cache:dl1 dl1:256:32:1:l -cache:dl2 ul2:1024:64:2:l
+
+    Or, a fully unified cache hierarchy (il1 pointed at dl1):
+      -cache:il1 dl1
+      -cache:dl1 ul1:256:32:1:l -cache:dl2 ul2:1024:64:2:l
+
+
+
+sim: ** starting performance simulation **
+warning: syscall: sigvec ignored
+warning: syscall: sigvec ignored
+ main path_include trigraph_pcp newline_fix name_newline_fix get_lintcmd rescan expand_to_temp_buffer handle_directive timestamp special_symbol do_include redundant_include_p is_system_include finclude record_control_macro import_hash lookup_import add_import check_precompiled check_preconditions pcfinclude pcstring_used write_output pass_thru_directive create_definition do_define check_macro_name compare_defs comp_def_part collect_expansion do_assert do_unassert check_assertion compare_token_lists read_token_list free_token_list assertion_install assertion_lookup delete_assertion do_line do_undef do_error do_warning do_once do_ident do_pragma do_sccs do_if do_elif eval_if_expression do_xifdef conditional_skip skip_if_group do_else do_endif validate_else skip_to_end_of_comment skip_quoted_string skip_paren_group output_line_command macroexpand macarg macarg1 discard_comments delete_newlines error error_from_errno warning error_with_line pedwarn pedwarn_with_file_and_line print_containing_files line_for_error grow_outbuf install lookup delete_macro hashf dump_single_macro dump_all_macros dump_defn_1 dump_arg_n initialize_char_syntax initialize_builtins make_definition make_undef make_assertion append_include_chain deps_output fatal fancy_abort perror_with_name pfatal_with_name memory_full xmalloc xrealloc xcalloc savestring file_size_and_mode
+time in parse: 62.635135
+time in integration: 7.351977
+time in jump: 79.491402
+time in cse: 144.116900
+time in loop: 53.311966
+time in cse2: 138.464713
+time in flow: 63.091274
+time in combine: 179.178250
+time in sched: 65.597330
+time in local-alloc: 86.864814
+time in global-alloc: 89.418989
+time in sched2: 52.181944
+time in dbranch: 101.662817
+time in shorten-branch: 3.258440
+time in stack-reg: 0.000000
+time in final: 38.923261
+time in varconst: 0.543003
+time in symout: 0.000000
+time in dump: 0.000000
+
+sim: ** simulation statistics **
+sim_num_insn             1627086266 # total number of instructions committed
+sim_num_refs              646713644 # total number of loads and stores committed
+sim_num_loads             414121683 # total number of loads committed
+sim_num_stores         232591961.0000 # total number of stores committed
+sim_num_branches          325309311 # total number of branches committed
+sim_elapsed_time               1314 # total simulation time in seconds
+sim_inst_rate          1238269.6088 # simulation speed (in insts/sec)
+sim_total_insn           2126080490 # total number of instructions executed
+sim_total_refs            835349416 # total number of loads and stores executed
+sim_total_loads           554575920 # total number of loads executed
+sim_total_stores       280773496.0000 # total number of stores executed
+sim_total_branches        426528507 # total number of branches executed
+sim_cycle                1484110090 # total simulation time in cycles
+sim_IPC                      1.0963 # instructions per cycle
+sim_CPI                      0.9121 # cycles per instruction
+sim_exec_BW                  1.4326 # total instructions (mis-spec + committed) per cycle
+sim_IPB                      5.0017 # instruction per branch
+IFQ_count                2449197476 # cumulative IFQ occupancy
+IFQ_fcount                493553266 # cumulative IFQ full count
+ifq_occupancy                1.6503 # avg IFQ occupancy (insn's)
+ifq_rate                     1.4326 # avg IFQ dispatch rate (insn/cycle)
+ifq_latency                  1.1520 # avg IFQ occupant latency (cycle's)
+ifq_full                     0.3326 # fraction of time (cycle's) IFQ was full
+RUU_count               14828987618 # cumulative RUU occupancy
+RUU_fcount                   199639 # cumulative RUU full count
+ruu_occupancy                9.9918 # avg RUU occupancy (insn's)
+ruu_rate                     1.4326 # avg RUU dispatch rate (insn/cycle)
+ruu_latency                  6.9748 # avg RUU occupant latency (cycle's)
+ruu_full                     0.0001 # fraction of time (cycle's) RUU was full
+LSQ_count                5886293827 # cumulative LSQ occupancy
+LSQ_fcount                 89225406 # cumulative LSQ full count
+lsq_occupancy                3.9662 # avg LSQ occupancy (insn's)
+lsq_rate                     1.4326 # avg LSQ dispatch rate (insn/cycle)
+lsq_latency                  2.7686 # avg LSQ occupant latency (cycle's)
+lsq_full                     0.0601 # fraction of time (cycle's) LSQ was full
+sim_slip                19728912250 # total number of slip cycles
+avg_sim_slip                12.1253 # the average slip between issue and retirement
+bpred_bimod.lookups       445438619 # total number of bpred lookups
+bpred_bimod.updates       325309311 # total number of updates
+bpred_bimod.addr_hits     283688236 # total number of address-predicted hits
+bpred_bimod.dir_hits      291517906 # total number of direction-predicted hits (includes addr-hits)
+bpred_bimod.misses         33791405 # total number of misses
+bpred_bimod.jr_hits        22410787 # total number of address-predicted hits for JR's
+bpred_bimod.jr_seen        29765386 # total number of JR's seen
+bpred_bimod.jr_non_ras_hits.PP      2660461 # total number of address-predicted hits for non-RAS JR's
+bpred_bimod.jr_non_ras_seen.PP      8578589 # total number of non-RAS JR's seen
+bpred_bimod.bpred_addr_rate    0.8721 # branch address-prediction rate (i.e., addr-hits/updates)
+bpred_bimod.bpred_dir_rate    0.8961 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_bimod.bpred_jr_rate    0.7529 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+bpred_bimod.bpred_jr_non_ras_rate.PP    0.3101 # non-RAS JR addr-pred rate (ie, non-RAS JR hits/JRs seen)
+bpred_bimod.retstack_pushes     29768543 # total number of address pushed onto ret-addr stack
+bpred_bimod.retstack_pops     27389435 # total number of address popped off of ret-addr stack
+bpred_bimod.used_ras.PP     21186797 # total number of RAS predictions used
+bpred_bimod.ras_hits.PP     19750326 # total number of RAS hits
+bpred_bimod.ras_rate.PP    0.9322 # RAS prediction rate (i.e., RAS hits/used RAS)
+il1.accesses             2314711288 # total number of accesses
+il1.hits                 2208687096 # total number of hits
+il1.misses                106024192 # total number of misses
+il1.replacements          106023680 # total number of replacements
+il1.writebacks                    0 # total number of writebacks
+il1.invalidations                 0 # total number of invalidations
+il1.miss_rate                0.0458 # miss rate (i.e., misses/ref)
+il1.repl_rate                0.0458 # replacement rate (i.e., repls/ref)
+il1.wb_rate                  0.0000 # writeback rate (i.e., wrbks/ref)
+il1.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+dl1.accesses              690737235 # total number of accesses
+dl1.hits                  674976354 # total number of hits
+dl1.misses                 15760881 # total number of misses
+dl1.replacements           15760369 # total number of replacements
+dl1.writebacks              5634693 # total number of writebacks
+dl1.invalidations                 0 # total number of invalidations
+dl1.miss_rate                0.0228 # miss rate (i.e., misses/ref)
+dl1.repl_rate                0.0228 # replacement rate (i.e., repls/ref)
+dl1.wb_rate                  0.0082 # writeback rate (i.e., wrbks/ref)
+dl1.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+dl2.accesses              127419766 # total number of accesses
+dl2.hits                  126310924 # total number of hits
+dl2.misses                  1108842 # total number of misses
+dl2.replacements            1104746 # total number of replacements
+dl2.writebacks               226831 # total number of writebacks
+dl2.invalidations                 0 # total number of invalidations
+dl2.miss_rate                0.0087 # miss rate (i.e., misses/ref)
+dl2.repl_rate                0.0087 # replacement rate (i.e., repls/ref)
+dl2.wb_rate                  0.0018 # writeback rate (i.e., wrbks/ref)
+dl2.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+itlb.accesses            2314711288 # total number of accesses
+itlb.hits                2313936303 # total number of hits
+itlb.misses                  774985 # total number of misses
+itlb.replacements            774921 # total number of replacements
+itlb.writebacks                   0 # total number of writebacks
+itlb.invalidations                0 # total number of invalidations
+itlb.miss_rate               0.0003 # miss rate (i.e., misses/ref)
+itlb.repl_rate               0.0003 # replacement rate (i.e., repls/ref)
+itlb.wb_rate                 0.0000 # writeback rate (i.e., wrbks/ref)
+itlb.inv_rate                0.0000 # invalidation rate (i.e., invs/ref)
+dtlb.accesses             695501429 # total number of accesses
+dtlb.hits                 695433670 # total number of hits
+dtlb.misses                   67759 # total number of misses
+dtlb.replacements             67631 # total number of replacements
+dtlb.writebacks                   0 # total number of writebacks
+dtlb.invalidations                0 # total number of invalidations
+dtlb.miss_rate               0.0001 # miss rate (i.e., misses/ref)
+dtlb.repl_rate               0.0001 # replacement rate (i.e., repls/ref)
+dtlb.wb_rate                 0.0000 # writeback rate (i.e., wrbks/ref)
+dtlb.inv_rate                0.0000 # invalidation rate (i.e., invs/ref)
+sim_invalid_addrs                 0 # total non-speculative bogus addresses seen (debug var)
+ld_text_base             0x00400000 # program text (code) segment base
+ld_text_size                2518224 # program text (code) size in bytes
+ld_data_base             0x10000000 # program initialized data segment base
+ld_data_size                 288100 # program init'ed `.data' and uninit'ed `.bss' size in bytes
+ld_stack_base            0x7fffc000 # program stack segment base (highest address in stack)
+ld_stack_size                 16384 # program initial stack size
+ld_prog_entry            0x00400140 # program entry point (initial PC)
+ld_environ_base          0x7fff8000 # program environment base address address
+ld_target_big_endian              0 # target executable endian-ness, non-zero if big endian
+mem.page_count                 1713 # total number of pages allocated
+mem.page_mem                  6852k # total size of memory pages allocated
+mem.ptab_misses              424338 # total first level page table misses
+mem.ptab_accesses       14276868359 # total page table accesses
+mem.ptab_miss_rate           0.0000 # first level page table miss rate
+

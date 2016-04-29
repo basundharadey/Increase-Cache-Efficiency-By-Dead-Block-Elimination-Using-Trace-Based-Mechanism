@@ -1,0 +1,47 @@
+simplesim-3.0\ Cache/sim-outorder
+simplesim-3.0\ Original/sim-outorder
+
+-DBP 1 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l
+
+
+#GCC
+
+simplesim-3.0\ Original/sim-outorder -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/gcc/Gcc /home/josh/Desktop/benchmarks/gcc/cccp.i -o cccp.s 2>&1 | tee Results\ 02/Gcc_cccp_Original_2.out
+
+simplesim-3.0\ Cache/sim-outorder -DBP 1 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/gcc/Gcc /home/josh/Desktop/benchmarks/gcc/cccp.i -o cccp.s 2>&1 | tee Results\ 02/Gcc_cccp_DBCP_Ref_2.out
+
+simplesim-3.0\ Cache/sim-outorder -DBP 2 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/gcc/Gcc /home/josh/Desktop/benchmarks/gcc/cccp.i -o cccp.s 2>&1 | tee Results\ 02/Gcc_cccp_DBCP_Burst_2.out
+
+
+simplesim-3.0\ Cache/sim-outorder -DBP 0 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/gcc/Gcc /home/josh/Desktop/benchmarks/gcc/cccp.i -o cccp.s 2>&1 | tee Results\ 02/Gcc_cccp_Original_C_2.out
+
+
+
+
+
+simplesim-3.0\ Cache/sim-outorder -DBP 1 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/gcc/Gcc /home/josh/Desktop/benchmarks/gcc/cccp.i -o cccp.s 2>&1 | tee Results\ 02/Gcc_cccp_DBCP_Test.out
+
+simplesim-3.0\ Cache/sim-outorder -DBP 2 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/gcc/Gcc /home/josh/Desktop/benchmarks/gcc/bank.i -o bank.s 2>&1 | tee Results\ 02/Gcc_bank_DBCP_Test0.out
+
+
+
+
+
+#BZIP
+simplesim-3.0\ Original/sim-outorder -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/bzip2/Bzip2 /home/josh/Desktop/benchmarks/bzip2/input.source 58 2>&1 | tee Results\ 02/bzip2_src_Original_2.out
+
+simplesim-3.0\ Cache/sim-outorder -DBP 1 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/bzip2/Bzip2 /home/josh/Desktop/benchmarks/bzip2/input.source 58 2>&1 | tee Results\ 02/bzip2_src_DBCP_Ref_2.out
+
+simplesim-3.0\ Cache/sim-outorder -DBP 2 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/bzip2/Bzip2 /home/josh/Desktop/benchmarks/bzip2/input.source 58 2>&1 | tee Results\ 02/bzip2_src_DBCP_Burst_2.out
+
+
+
+#VPR
+simplesim-3.0\ Original/sim-outorder -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/vpr/Vpr /home/josh/Desktop/benchmarks/vpr/net.in /home/josh/Desktop/benchmarks/vpr/arch.in /home/josh/Desktop/benchmarks/vpr/place.out /home/josh/Desktop/benchmarks/vpr/dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2 2>&1 | tee vpr_Original_2.out
+
+
+simplesim-3.0\ Cache/sim-outorder -DBP 1 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/vpr/Vpr /home/josh/Desktop/benchmarks/vpr/net.in /home/josh/Desktop/benchmarks/vpr/arch.in /home/josh/Desktop/benchmarks/vpr/place.out /home/josh/Desktop/benchmarks/vpr/dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2 2>&1 | tee vpr_DBCP_Ref_2.out
+
+simplesim-3.0\ Cache/sim-outorder -DBP 2 -ruu:size 128 -lsq:size 16 -cache:dl1 dl1:256:32:2:l -cache:il1 il1:256:32:2:l -cache:il2 dl2 -cache:dl2 dl2:512:128:8:l /home/josh/Desktop/benchmarks/vpr/Vpr /home/josh/Desktop/benchmarks/vpr/net.in /home/josh/Desktop/benchmarks/vpr/arch.in /home/josh/Desktop/benchmarks/vpr/place.out /home/josh/Desktop/benchmarks/vpr/dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2 2>&1 | tee vpr_DBCP_Burst_2.out
+
+
